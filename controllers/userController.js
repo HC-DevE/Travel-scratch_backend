@@ -1,7 +1,9 @@
-const User = require('../models/User');
+const sequelize = require('../config/db');
+const User = require('../models/User')(sequelize);
 
 exports.getUserProfile = async (req, res) => {
   try {
+
     const user = await User.findByPk(req.user.id);
 
     if (!user) {
@@ -10,7 +12,7 @@ exports.getUserProfile = async (req, res) => {
 
     res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ message: 'Server error', error: err });
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 

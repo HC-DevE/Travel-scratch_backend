@@ -2,14 +2,14 @@ const express = require("express");
 const passport = require("passport");
 const cors = require("cors");
 const app = express();
-const { sequelize } = require("./config/db");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
+const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const tripRoutes = require("./routes/tripRoutes");
-const errorHandler = require("./middleware/errorHandler");
+const friendshipRoutes = require('./routes/friendshipRoute');
 
 require("./config/db");
 require("./config/passport")(passport);
@@ -28,9 +28,10 @@ app.use("/api/trips", tripRoutes);
 // app.use("/api/photos", photoRoutes);
 // app.use("/api/places", placeRoutes);
 // app.use("/api/reviews", reviewRoutes);
-// app.use("/api/friendships", friendshipRoutes);
+app.use("/api/friendships", friendshipRoutes);
 // app.use("/api/comments", commentRoutes);
 // app.use("/api/likes", likeRoutes);
+
 
 
 app.use(errorHandler);

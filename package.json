@@ -28,5 +28,10 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "sequelize": "^6.31.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HC-DevE/Travel-APP_JS.git"
   }
+  
 }

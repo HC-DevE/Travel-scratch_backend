@@ -9,7 +9,8 @@ const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const tripRoutes = require("./routes/tripRoutes");
-const friendshipRoutes = require('./routes/friendshipRoute');
+const friendshipRoutes = require("./routes/friendshipRoute");
+const passwordRoutes = require("./routes/passwordRoutes");
 
 require("./config/db");
 require("./config/passport")(passport);
@@ -31,8 +32,7 @@ app.use("/api/trips", tripRoutes);
 app.use("/api/friendships", friendshipRoutes);
 // app.use("/api/comments", commentRoutes);
 // app.use("/api/likes", likeRoutes);
-
-
+app.use("/api/password", passwordRoutes);
 
 app.use(errorHandler);
 

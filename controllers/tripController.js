@@ -1,6 +1,7 @@
 const sequelize = require("../config/db");
 const Trip = require("../models/Trip")(sequelize);
 
+
 exports.createTrip = async (req, res) => {
 
   // check if ther is a title 
@@ -42,9 +43,13 @@ exports.getTrips = async (req, res) => {
   // Get all trips for a user
   // Get the user from the request
   const user = req.user;
+  console.log(user);
 
   // Get the user's trips
-  const trips = await user.getTrips();
+  const trips = await Trip.findAll(
+    { where: { user_id: req.user.id } },
+    // { include: [{ model: Trip }] }
+  )
 
   if (!trips) {
     return res.status(404).json({ error: "No trips found" });

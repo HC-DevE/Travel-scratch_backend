@@ -19,23 +19,26 @@ exports.forgotPassword = async (req, res) => {
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
-        type: "OAuth2",
-        // user: process.env.NODEMAILER_USER_EMAIL,
-        user: "devtest@gmail.com",
-        pass: "test123456",
-        // pass: process.env.NODEMAILER_PSSWD,
-        clientId: process.env.OAUTH_CLIENT_ID,
+        // type: "OAuth2",
+        user: process.env.NODEMAILER_USER_EMAIL,
+        // user: "houcineessayad@gmail.com",
+        // pass: "vyvgdnasqtuvwhgx",
+        pass: process.env.NODEMAILER_PSSWD,
+        // clientId: process.env.OAUTH_CLIENT_ID,
         // clientId: '473828341724-j41na2n8gragv084t4ch80jk4i1ivcin.apps.googleusercontent.com',
-        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        // clientSecret: process.env.OAUTH_CLIENT_SECRET,
         // clientSecret: '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',
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        // refreshToken: process.env.OAUTH_REFRESH_TOKEN,
         // refreshToken: '1//04fhICPgY2khnCgYIARAAGAQSNwF-L9IrGdVAVO1YTPewpc5Fj28YNW8WrpTmWJcPg2Cx3Nxv5EceFeYw4MDoShQu1Q8XWg3YNeE',
       },
     });
 
     const mailOptions = {
-      from: "xdarkhackx36@gmail.com",
+      from: "admin@travel-scratch.fr",
       to: user.email,
       subject: "Password Reset",
       text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\nhttp://${req.headers.host}/reset-password/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,

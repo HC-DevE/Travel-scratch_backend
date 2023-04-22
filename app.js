@@ -28,21 +28,22 @@ app.get("/", (req, res) => {
 });
 
 app.use((req, res, next) => {
-  if (req.user) {
-    console.log(req.user);
-    // res.locals.user = req.user;
-  }
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
+    "X-CSRF-Token,Origin, X-Requested-With, Content, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
   );
-  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
+});
+
+app.use((req, res) => {
+  res.json({ message: "Working !" }); 
 });
 
 app.use("/api/auth", authRoutes);

@@ -1,4 +1,4 @@
-const express=require('express');
+const express = require("express");
 const passport = require("passport");
 const cors = require("cors");
 const app = express();
@@ -21,7 +21,29 @@ app.use(express.json());
 app.use(passport.initialize());
 
 // Import and configure passport
-require("./config/passport")(passport); 
+require("./config/passport")(passport);
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
+app.use((req, res, next) => {
+  if (req.user) {
+    console.log(req.user);
+    // res.locals.user = req.user;
+  }
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

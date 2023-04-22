@@ -60,3 +60,16 @@ exports.getTrips = async (req, res) => {
 };
 
 // Add other trip-related actions
+
+
+//testing all the trips
+exports.getAllTrips = async (req, res) => {
+  try {
+    const trips = await Trip.findAll();
+    res.status(200).json(trips);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+

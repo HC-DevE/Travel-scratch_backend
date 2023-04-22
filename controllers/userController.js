@@ -43,3 +43,14 @@ exports.updateUserProfile = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+
+
+  //just for testing the route without bein logged in
+  exports.getAllUsers = async (req, res) => {
+    try {
+      const users = await User.findAll();
+      res.status(200).json(users);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }

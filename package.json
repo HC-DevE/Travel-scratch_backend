@@ -7,10 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "nodemon app.js",
+    "dev": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon",
-    "build": "npm i"
+    "build": "npm install"
   },
   "keywords": [],
   "author": "HC-DevE",

@@ -1,4 +1,4 @@
-const express = require("express");
+const express=require('express');
 const passport = require("passport");
 const cors = require("cors");
 const app = express();
@@ -20,7 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
 
-require("./config/passport")(passport); // Import and configure passport
+// Import and configure passport
+require("./config/passport")(passport); 
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

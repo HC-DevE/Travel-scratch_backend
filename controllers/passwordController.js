@@ -90,3 +90,41 @@ exports.resetPassword = async (req, res) => {
     }
   }
 };
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    const decodedToken = jwt.verify(req.body.token, JWT_SECRET);
+    const user = await User.findOne({ where: { id: decodedToken.id } });
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      oldPassword,
+      user.password_hash
+    );
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: "Old password is incorrect" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
+    }
+
+    // Update user password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password_hash = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password has been changed successfully" });
+  } catch (error) {
+    if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError"){
+      res.status(400).json({ error: "Invalid token" });
+    } else {
+      res.status(500).json({ error: "Error processing the request" });
+    }
+  }
+};

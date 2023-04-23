@@ -14,6 +14,13 @@ module.exports = (sequelize) => {
   // const Post = require("./Post")(sequelize);
   // const Comment = require("./Comment")(sequelize);
   // const Like = require("./Like")(sequelize);
+  // const TripComment = require("./TripComment")(sequelize);
+  // const TripLike = require("./TripLike")(sequelize);
+  // const TripPlaceComment = require("./TripPlaceComment")(sequelize);
+  // const TripPlaceLike = require("./TripPlaceLike")(sequelize);
+  // const TripPlacePhoto = require("./TripPlacePhoto")(sequelize);
+  // const TripPlaceReview = require("./TripPlaceReview")(sequelize);
+  
   // Relations User - Friendship
   User.belongsToMany(User, { as: "Friends", through: Friendship });
 

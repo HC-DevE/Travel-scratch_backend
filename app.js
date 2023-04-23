@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const tripRoutes = require("./routes/tripRoutes");
 const friendshipRoutes = require("./routes/friendshipRoute");
 const passwordRoutes = require("./routes/passwordRoutes");
+const placeRoutes = require("./routes/placeRoutes");
 
 require("./config/db");
 require("./config/passport")(passport);
@@ -29,7 +30,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
 // app.use("/api/posts", postRoutes);
 // app.use("/api/photos", photoRoutes);
-// app.use("/api/places", placeRoutes);
+app.use("/api/places", placeRoutes);
 // app.use("/api/reviews", reviewRoutes);
 app.use("/api/friendships", friendshipRoutes);
 // app.use("/api/comments", commentRoutes);

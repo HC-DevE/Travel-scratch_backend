@@ -14,12 +14,11 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     location: {
-        // type: DataTypes.POINT,
-      type: DataTypes.GEOGRAPHY,
+      type: DataTypes.GEOGRAPHY('POINT'),
       allowNull: false,
     },
     created_at: {
@@ -38,16 +37,46 @@ module.exports = (sequelize) => {
     modelName: "Place",
     timestamps: false,
     });
-    Place.associate = (models) => {
-        Place.belongsToMany(models.Trip, {
-            through: models.TripPlace,
-            foreignKey: "place_id",
-        });
-    }
-    Place.associate = (models) => {
-        Place.hasMany(models.TripPlace, {
-            foreignKey: "place_id",
-        });
-    }
   return Place;
 };
+
+// const { DataTypes } = require("sequelize");
+
+// module.exports = (sequelize) => {
+//   const Place = sequelize.define(
+//     "Place",
+//     {
+//       id: {
+//         type: DataTypes.INTEGER,
+//         primaryKey: true,
+//         autoIncrement: true,
+//       },
+//       name: {
+//         type: DataTypes.STRING,
+//         allowNull: false,
+//       },
+//       description: {
+//         type: DataTypes.TEXT,
+//       },
+//       location: {
+//         type: DataTypes.GEOMETRY("POINT"),
+//       },
+//       created_at: {
+//         type: DataTypes.DATE,
+//         allowNull: false,
+//         defaultValue: DataTypes.NOW,
+//       },
+//       updated_at: {
+//         type: DataTypes.DATE,
+//         allowNull: false,
+//         defaultValue: DataTypes.NOW,
+//       },
+//     },
+//     {
+//       timestamps: false,
+//       tableName: "places",
+//     }
+//   );
+
+//   return Place;
+// };

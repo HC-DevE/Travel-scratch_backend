@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
   // const TripPlaceLike = require("./TripPlaceLike")(sequelize);
   // const TripPlacePhoto = require("./TripPlacePhoto")(sequelize);
   // const TripPlaceReview = require("./TripPlaceReview")(sequelize);
-  
+
   // Relations User - Friendship
   User.belongsToMany(User, { as: "Friends", through: Friendship });
 
@@ -29,8 +29,8 @@ module.exports = (sequelize) => {
   Trip.belongsTo(User, { foreignKey: "user_id" });
 
   // Relations Trip - Place - TripPlace
-  Trip.belongsToMany(Place, { through: TripPlace });
-  Place.belongsToMany(Trip, { through: TripPlace });
+  Trip.belongsToMany(Place, { through: TripPlace, foreignKey: "trip_id" });
+  Place.belongsToMany(Trip, { through: TripPlace, foreignKey: "place_id" });
 
   // Relations Trip - Photo
   // Trip.hasMany(Photo, { foreignKey: "trip_id" });
@@ -61,4 +61,21 @@ module.exports = (sequelize) => {
   // Post.belongsToMany(User, { through: Like });
 
   console.log("Associations initialized");
+
+  return {
+    User,
+    Friendship,
+    Trip,
+    Place,
+    TripPlace,
+    // Photo,
+    // Group,
+    // GroupMember,
+    // Review,
+    // Post,
+    // Comment,
+    // Like,
+    // TripComment,
+    // TripLike,
+  };
 };

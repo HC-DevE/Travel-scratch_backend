@@ -1,6 +1,8 @@
 const sequelize = require("../config/db");
+const User = require("../models/User")(sequelize);
 const Trip = require("../models/Trip")(sequelize);
-const TripPlace = require("../models/TripPlace")(sequelize);
+const Place = require("../models/Place")(sequelize);
+// const TripPlace = require("../models/TripPlace")(sequelize);
 
 exports.createTrip = async (req, res) => {
   // check if ther is a title
@@ -38,24 +40,26 @@ exports.createTrip = async (req, res) => {
   res.status(201).json({ message: "Trip created successfully", trip: trip });
 };
 
+// Get all trips for a user
 exports.getUserTrips = async (req, res) => {
-  // Get all trips for a user
+  const { Trip, Place, TripPlace } = require("../models/associations")(
+    sequelize
+  );
   // Get the user from the request
   const user = req.user;
-  console.log(user);
 
   // Get the user's trips
-  const trips = await Trip.findAll(
-    { where: { user_id: req.user.id } },
-    {
-      include: [
-        { model: TripPlace },
-        // { model: Photo },
-        // { model: Place, include: [{ model: Review }] },
-        // { model: Trip_Group, include: [{ model: User, as: "group_members" }] },
-      ],
-    }
-  );
+  const trips = await Trip.findAll({
+    where: { user_id: user.id },
+    include: [
+      {
+        model: Place,
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+  });
 
   if (!trips) {
     return res.status(404).json({ error: "No trips found" });
@@ -69,8 +73,20 @@ exports.getUserTrips = async (req, res) => {
 
 //testing all the trips for all users
 exports.getAllTrips = async (req, res) => {
+  const { Trip, Place, TripPlace } = require("../models/associations")(
+    sequelize
+  );
   try {
-    const trips = await Trip.findAll();
+    const trips = await Trip.findAll({
+      include: [
+        {
+          model: Place,
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
     res.status(200).json(trips);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,17 +1,9 @@
-// Path: models\TripPlace.js
-
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
   class TripPlace extends Model {}
   TripPlace.init(
     {
-      // id: {
-      //   type: DataTypes.INTEGER,
-      //   primaryKey: true,
-      //   autoIncrement: true,
-      //   allowNull: false,
-      // },
       trip_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -34,11 +26,6 @@ module.exports = (sequelize) => {
 
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
-      },
     },
     {
       sequelize,
@@ -46,7 +33,7 @@ module.exports = (sequelize) => {
       modelName: "TripPlace",
       timestamps: false,
     }
-
   );
+
   return TripPlace;
 };

@@ -14,12 +14,18 @@ This is the backend for the Travel-scratch project. It is a REST API built with 
 
 | Method | Endpoint | Description |
 | ------ | -------- | ----------- |
-| POST | /api/user/register | Register a new user |
-| POST | /api/user/login | Login a user |
 | GET | /api/user | Get all users |
 | GET | /api/user/:id | Get a user by id |
 | PUT | /api/user/:id | Update a user |
 | DELETE | /api/user/:id | Delete a user |
+
+### Auth
+
+| Method | Endpoint | Description |
+| ------ | -------- | ----------- |
+| POST | /api/auth/register | Register a new user |
+| POST | /api/auth/login | Login a user |
+
 
 ### Trip
 

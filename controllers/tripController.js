@@ -2,7 +2,6 @@ const sequelize = require("../config/db");
 const User = require("../models/User")(sequelize);
 const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
-// const TripPlace = require("../models/TripPlace")(sequelize);
 
 exports.createTrip = async (req, res) => {
   // check if ther is a title
@@ -42,9 +41,8 @@ exports.createTrip = async (req, res) => {
 
 // Get all trips for a user
 exports.getUserTrips = async (req, res) => {
-  const { Trip, Place, TripPlace } = require("../models/associations")(
-    sequelize
-  );
+  const { Place, Trip } = require("../models/associations")(sequelize);
+
   // Get the user from the request
   const user = req.user;
 
@@ -58,6 +56,9 @@ exports.getUserTrips = async (req, res) => {
           attributes: [],
         },
       },
+      // {
+      //   model: User,
+      // }
     ],
   });
 
@@ -73,17 +74,15 @@ exports.getUserTrips = async (req, res) => {
 
 //testing all the trips for all users
 exports.getAllTrips = async (req, res) => {
-  const { Trip, Place, TripPlace } = require("../models/associations")(
-    sequelize
-  );
+  const { Place, Trip } = require("../models/associations")(sequelize);
   try {
     const trips = await Trip.findAll({
       include: [
         {
           model: Place,
           through: {
-            attributes: [],
-          },
+            attributes: [], // to avoid the other columns in the assocations
+            },
         },
       ],
     });

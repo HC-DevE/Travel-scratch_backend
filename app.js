@@ -3,8 +3,7 @@ const passport = require("passport");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-const PORT = process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 4000;
 const errorHandler = require("./middleware/errorHandler");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");

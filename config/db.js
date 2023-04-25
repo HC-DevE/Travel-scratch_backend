@@ -2,11 +2,10 @@
 const { Sequelize } = require("sequelize");
 const mysql = require("mysql2");
 const initAssociations = require("../models/associations");
-require("dotenv").config();
 
 //localhost database connection
 const sequelize = new Sequelize(process.env.LOCAL_DB_NAME, process.env.LOCAL_DB_USERNAME, process.env.LOCAL_DB_PSSWD, {
-  host: "localhost",
+  host: process.env.LOCAL_DB_HOST,
   dialect: "mysql",
   dialectModule: mysql,
   pool: {

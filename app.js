@@ -24,6 +24,12 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 
+// app.use("/api2/", ()=>{
+//   app.use("/auth", authRoutes);
+// }) to test
+
+
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);

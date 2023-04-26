@@ -6,9 +6,6 @@ const passport = require('passport');
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 
-//logout route
-// router.get('/logout', authController.logout);
-
 // Facebook authentication
 // router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 // router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/api/auth/login' }), authController.facebookAuthCallback);

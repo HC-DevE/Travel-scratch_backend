@@ -41,31 +41,31 @@ module.exports = (sequelize) => {
     foreignKey: "place_id",
   });
 
-  // Relations Trip - Photo
+  // // Relations Trip - Photo
   // Trip.hasMany(Photo, { foreignKey: "trip_id" });
   // Photo.belongsTo(Trip, { foreignKey: "trip_id" });
 
-  // Relations User - Group - GroupMember
+  // // Relations User - Group - GroupMember
   // User.belongsToMany(Group, { through: GroupMember });
   // Group.belongsToMany(User, { through: GroupMember });
 
-  // Relations User - Review - Place
+  // // Relations User - Review - Place
   // User.hasMany(Review, { foreignKey: "user_id" });
   // Review.belongsTo(User, { foreignKey: "user_id" });
   // Place.hasMany(Review, { foreignKey: "place_id" });
   // Review.belongsTo(Place, { foreignKey: "place_id" });
 
-  // Relations User - Post
+  // // Relations User - Post
   // User.hasMany(Post, { foreignKey: "user_id" });
   // Post.belongsTo(User, { foreignKey: "user_id" });
 
-  // Relations User - Comment - Post
+  // // Relations User - Comment - Post
   // User.hasMany(Comment, { foreignKey: "user_id" });
   // Comment.belongsTo(User, { foreignKey: "user_id" });
   // Post.hasMany(Comment, { foreignKey: "post_id" });
   // Comment.belongsTo(Post, { foreignKey: "post_id" });
 
-  // Relations User - Like - Post
+  // // Relations User - Like - Post
   // User.belongsToMany(Post, { through: Like });
   // Post.belongsToMany(User, { through: Like });
 

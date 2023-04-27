@@ -37,12 +37,12 @@ module.exports = (sequelize) => {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        // defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        // defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
       },
       gender: {
         type: DataTypes.ENUM("male", "female", "other"),
@@ -59,7 +59,7 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      tableName:'users',
+      tableName: "users",
       modelName: "User",
       timestamps: false,
     }

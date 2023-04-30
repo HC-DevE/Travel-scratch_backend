@@ -8,7 +8,9 @@ const authHandler = require("../middleware/authHandler");
 router.post("/", authHandler ,friendshipController.createFriendship);
 router.get("/", authHandler ,friendshipController.findAcceptedFriendships);
 router.get("/:id", authHandler ,friendshipController.findFriendshipById);
+
 router.put("/:id", authHandler ,friendshipController.updateFriendshipStatus);
+
 router.delete("/:id", authHandler ,friendshipController.deleteFriendship);
 
 module.exports = router;

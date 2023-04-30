@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+require("dotenv").config();
 // const FacebookStrategy = require('passport-facebook').Strategy;
 // const { OAuth2Client } = require("google-auth-library");
 // const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -77,8 +78,8 @@ exports.login = async (req, res) => {
         if (err) {
           throw err;
         }
-
-        res.json({ success: true, token: "Bearer " + token });
+        // res.json({ success: true, token: "Bearer " + token });
+        res.json({ success: true, token: token });
       }
     );
   } catch (err) {

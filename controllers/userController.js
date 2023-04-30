@@ -9,7 +9,9 @@ exports.getUserProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    //remove password from user
+    const { password_hash, ...rest } = Object.assign({}, user.get());
+    res.status(200).json(rest);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -43,11 +45,20 @@ exports.deleteUserProfile = async (req, res) => {
   }
 };
 
-//just for testing the route without bein logged in
+//just for testing the route without being logged in 
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.status(200).json(users);
+
+    if (!users) {
+      return res.status(404).json({ error: "Users not found" });
+    }
+    //remove password_hash from the users
+    const usersWithoutPassword = users.map((user) => {
+      const { password_hash, ...rest } = Object.assign({}, user.get());
+      return rest;
+    });
+    res.status(200).json(usersWithoutPassword);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -23,7 +23,6 @@ exports.createTrip = async (req, res) => {
   }
   // Get the trip data from the request
   const { title, description, start_date, end_date } = req.body;
-
   // Create a new trip
   const trip = await Trip.create({
     title,
@@ -34,8 +33,6 @@ exports.createTrip = async (req, res) => {
   });
   // Add the trip to the user's trips
   // user.addTrip(trip);
-
-  // Send the trip back to the client
   res.status(201).json({ message: "Trip created successfully", trip: trip });
 };
 
@@ -56,17 +53,12 @@ exports.getUserTrips = async (req, res) => {
           attributes: [],
         },
       },
-      // {
-      //   model: User,
-      // }
     ],
   });
 
   if (!trips) {
     return res.status(404).json({ error: "No trips found" });
   }
-
-  // Send the trips back to the client
   res.status(200).json(trips);
 };
 
@@ -82,7 +74,7 @@ exports.getAllTrips = async (req, res) => {
           model: Place,
           through: {
             attributes: [], // to avoid the other columns in the assocations
-            },
+          },
         },
       ],
     });

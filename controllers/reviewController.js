@@ -1,6 +1,7 @@
 //review controller
 
 const sequelize = require("../config/db");
+const errorHandler = require("../middleware/errorHandler");
 
 const Review = require("../models/Review")(sequelize);
 const Place = require("../models/Place")(sequelize);
@@ -10,15 +11,15 @@ const User = require("../models/User")(sequelize);
 exports.getAllReviews = async (req, res, next) => {
   const { Review } = require("../models/associations")(sequelize);
   try {
-    // const place = await Place.findByPk(req.params.id);
+    const place = await Place.findByPk(req.query.placeId);
 
-    // if (!place) {
-    //   return next(`Place not found with id of ${req.params.id}`, 404);
-    // }
+    if (!place) {
+      return next(`Place not found with id of ${req.params.placeId}`, 404);
+    }
 
     const reviews = await Review.findAll({
-      //   where: { placeId: place.id },
-      include: [User, Place],
+      where: { place_id: place.id },
+      include: [Place],
     });
     res.status(200).json({
       success: true,
@@ -30,7 +31,6 @@ exports.getAllReviews = async (req, res, next) => {
 };
 
 //get review by id
-
 exports.getReviewById = async (req, res, next) => {
   try {
     const review = await Review.findByPk(req.params.id);
@@ -44,20 +44,17 @@ exports.getReviewById = async (req, res, next) => {
 };
 
 //create review
-
 exports.createReview = async (req, res) => {
   // Check if the required review data is present
-  if (!req.body.rating || !req.body.comment || !req.params.placeId) {
-    return res
-      .status(400)
-      .json({ error: "Rating, comment, and placeId are required" });
+  if (!req.body.rating || !req.body.comment) {
+    return res.status(400).json({ error: "Please provide all required data" });
   }
 
   // Get the user from the request
   const user = req.user;
 
   // Check if the place exists
-  const place = await Place.findByPk(req.params.placeId);
+  const place = await Place.findByPk(req.body.place_id);
   if (!place) {
     return res.status(404).json({ error: "Place not found" });
   }
@@ -66,8 +63,8 @@ exports.createReview = async (req, res) => {
   const review = await Review.create({
     rating: req.body.rating,
     comment: req.body.comment,
-    userId: user.id,
-    placeId: place.id,
+    user_id: user.id,
+    place_id: place.id,
   });
 
   res.status(201).json({ message: "Review created successfully", review });
@@ -77,6 +74,14 @@ exports.createReview = async (req, res) => {
 
 exports.updateReview = async (req, res, next) => {
   try {
+    const place = await Place.findByPk(req.body.place_id);
+    if (!place) {
+      //return error 404 place not found
+      res.status(404).json({
+        success: false,
+        error: "Place not found",
+      });
+    }
     const review = await Review.findByPk(req.params.id);
     if (!review) {
       return next(

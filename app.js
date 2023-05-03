@@ -1,9 +1,9 @@
-const express = require("express");
-const passport = require("passport");
+const app = express();
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
-const app = express();
+const express = require("express");
+const passport = require("passport");
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 

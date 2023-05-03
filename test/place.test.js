@@ -4,6 +4,8 @@ const app = require("../app");
 const sequelize = require("../config/db");
 const { Place } = require("../models/associations")(sequelize);
 
+
+//create place
 describe("Place Creation", () => {
   let token;
 

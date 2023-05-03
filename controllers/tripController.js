@@ -1,5 +1,4 @@
 const sequelize = require("../config/db");
-const User = require("../models/User")(sequelize);
 const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
 
@@ -23,7 +22,6 @@ exports.createTrip = async (req, res) => {
   }
   // Get the trip data from the request
   const { title, description, start_date, end_date } = req.body;
-
   // Create a new trip
   const trip = await Trip.create({
     title,
@@ -34,14 +32,12 @@ exports.createTrip = async (req, res) => {
   });
   // Add the trip to the user's trips
   // user.addTrip(trip);
-
-  // Send the trip back to the client
   res.status(201).json({ message: "Trip created successfully", trip: trip });
 };
 
 // Get all trips for a user
 exports.getUserTrips = async (req, res) => {
-  const { Place, Trip } = require("../models/associations")(sequelize);
+  const { Trip } = require("../models/associations")(sequelize);
 
   // Get the user from the request
   const user = req.user;
@@ -56,17 +52,12 @@ exports.getUserTrips = async (req, res) => {
           attributes: [],
         },
       },
-      // {
-      //   model: User,
-      // }
     ],
   });
 
   if (!trips) {
     return res.status(404).json({ error: "No trips found" });
   }
-
-  // Send the trips back to the client
   res.status(200).json(trips);
 };
 
@@ -74,7 +65,7 @@ exports.getUserTrips = async (req, res) => {
 
 //testing all the trips for all users
 exports.getAllTrips = async (req, res) => {
-  const { Place, Trip } = require("../models/associations")(sequelize);
+  const { Trip } = require("../models/associations")(sequelize);
   try {
     const trips = await Trip.findAll({
       include: [
@@ -82,7 +73,7 @@ exports.getAllTrips = async (req, res) => {
           model: Place,
           through: {
             attributes: [], // to avoid the other columns in the assocations
-            },
+          },
         },
       ],
     });

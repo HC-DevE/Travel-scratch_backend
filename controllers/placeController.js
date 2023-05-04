@@ -134,19 +134,21 @@ exports.getUserPlaces = async (req, res, next) => {
 //get user place
 
 exports.getUserPlaceById = async (req, res, next) => {
-  const place = await Place.findOne({
-    where: { user_id: req.user.id, id: req.params.id },
-  });
-  if (!place) {
-    return next(
-      new ErrorResponse(
-        `Place not found with id of ${req.params.id} for user ${req.user.id}`,
-        404
-      )
-    );
-  }
-  res.status(200).json({
-    success: true,
-    data: place,
-  });
-};
+  try {
+    const place = await Place.findOne({
+      where: { user_id: req.user.id, id: req.params.id },
+    });
+    if (!place) {
+      return res.status(404).json({
+        success: false,
+        error: "Place not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      data: place,
+    });
+  } catch (error) {
+    next(error);
+  };
+}

@@ -3,15 +3,13 @@ const User = require("../models/User")(sequelize);
 
 exports.getUserProfile = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ["password_hash"] },
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    //remove password from user
-    const { password_hash, ...rest } = Object.assign({}, user.get());
-    res.status(200).json(rest);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -21,7 +19,18 @@ exports.updateUserProfile = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({
+        success: false,
+        error: "User not found",
+      });
+    }
+
+    // Check that the authenticated user matches the requested user
+    if (user.id !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        error: "You are not authorized to perform this action",
+      });
     }
 
     const updatedUser = await user.update(req.body);

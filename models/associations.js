@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
   const Trip = require("./Trip")(sequelize);
   const Place = require("./Place")(sequelize);
   // const TripPlace = require("./TripPlace")(sequelize);
-  // const Photo = require("./Photo")(sequelize);
+  const Photo = require("./Photo")(sequelize);
   // const Group = require("./Group")(sequelize);
   // const GroupMember = require("./GroupMember")(sequelize);
   const Review = require("./Review")(sequelize);
@@ -40,8 +40,8 @@ module.exports = (sequelize) => {
   });
 
   // // Relations Trip - Photo
-  // Trip.hasMany(Photo, { foreignKey: "trip_id" });
-  // Photo.belongsTo(Trip, { foreignKey: "trip_id" });
+  Trip.hasMany(Photo, { foreignKey: "trip_id" });
+  Photo.belongsTo(Trip, { foreignKey: "trip_id" });
 
   // // Relations User - Group - GroupMember
   // User.belongsToMany(Group, { through: GroupMember });
@@ -74,7 +74,7 @@ module.exports = (sequelize) => {
     Friendship,
     Trip,
     Place,
-    // Photo,
+    Photo,
     // Group,
     // GroupMember,
     Review,

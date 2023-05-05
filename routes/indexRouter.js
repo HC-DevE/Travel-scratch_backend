@@ -8,12 +8,13 @@ const friendshipRoutes = require("./friendshipRoute");
 const passwordRoutes = require("./passwordRoutes");
 const placeRoutes = require("./placeRoutes");
 const reviewRoutes = require("./reviewRoutes");
+const photoRoutes = require("./photoRoutes");
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/trips", tripRoutes);
 // app.use("/posts", postRoutes);
-// app.use("/photos", photoRoutes);
+app.use("/photos", photoRoutes);
 app.use("/places", placeRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/friendships", friendshipRoutes);

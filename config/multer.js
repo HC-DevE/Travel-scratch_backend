@@ -21,7 +21,7 @@ const fileFilter = function (req, file, cb) {
   }
   cb(null, true);
 };
-
-const upload = multer({ storage, fileFilter });
+//add a maximum image size to 5MB
+const upload = multer({ storage, fileFilter, limits: { fileSize: 5000000 } });
 
 module.exports = upload;

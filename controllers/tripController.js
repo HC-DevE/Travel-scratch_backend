@@ -1,6 +1,8 @@
 const sequelize = require("../config/db");
 const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
+const User = require("../models/User")(sequelize);
+const Photo = require("../models/Photo")(sequelize);
 
 exports.createTrip = async (req, res) => {
   // check if ther is a title
@@ -52,6 +54,9 @@ exports.getUserTrips = async (req, res) => {
           attributes: [],
         },
       },
+      {
+        model: Photo,
+      },
     ],
   });
 
@@ -74,6 +79,13 @@ exports.getAllTrips = async (req, res) => {
           through: {
             attributes: [], // to avoid the other columns in the assocations
           },
+        },
+        // {
+        //   model: User,
+        //   attributes: ["id", "username", "email"],
+        // },
+        {
+          model: Photo,
         },
       ],
     });

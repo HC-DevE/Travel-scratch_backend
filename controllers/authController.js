@@ -2,6 +2,7 @@ const sequelize = require("../config/db");
 const User = require("../models/User")(sequelize);
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const nodemailerService = require("../services/nodemailerService");
 const passport = require("passport");
 const Joi = require("joi");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -65,6 +66,13 @@ exports.register = async (req, res) => {
       gender,
       preferences,
     });
+
+    //send welcome mail
+
+    const subject = "Welcome to our dating app";
+    const template = "welcome-user";
+    const context = { email, first_name, last_name };
+    await nodemailerService.sendMail(email, subject, template, context);
 
     res
       .status(201)

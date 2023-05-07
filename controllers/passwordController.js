@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const sequelize = require("../config/db");
 const User = require("../models/User")(sequelize);
 require("dotenv").config();
+const nodemailerService = require("../services/nodemailerService");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
@@ -17,38 +17,16 @@ exports.forgotPassword = async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1h" });
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        // type: "OAuth2", // Google Gmail API v1
-        user: process.env.NODEMAILER_USER_EMAIL,
-        pass: process.env.NODEMAILER_PSSWD,
-        // clientId: process.env.OAUTH_CLIENT_ID,
-        // clientSecret: process.env.OAUTH_CLIENT_SECRET,
-        // refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-        // accessToken: process.env.OAUTH_ACCESS_TOKEN,
-      },
-    });
+    // Send email to user
+    const resetPasswordLink = `http://${req.headers.host}/reset-password/${token}`;
+    const displayLink = "Reset password here";
+    const subject = "Password Reset Request";
+    const template = "reset-password";
+    const context = { user, resetPasswordLink, displayLink };
 
-    const mailOptions = {
-      from: "admin@travel-scratch.fr",
-      to: user.email,
-      subject: "Password Reset",
-      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\nhttp://${req.headers.host}/reset-password/${token}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,
-    };
-
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) {
-        console.log(err);
-        return res
-          .status(500)
-          .json({ error: "Error sending the password reset email" });
-      }
-
-      res.status(200).json({ message: "Password reset email sent" });
+    await nodemailerService.sendMail(user.email, subject, template, context);
+    res.status(200).json({
+      message: "Password reset link has been sent to your email address",
     });
   } catch (error) {
     res.status(500).json({ error: "Error processing the request" });
@@ -75,6 +53,12 @@ exports.resetPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password_hash = hashedPassword;
     await user.save();
+
+    //notify user that password is reset successfully
+    const subject = "Password Reset Successfully";
+    const template = "reset-password-success";
+    const context = { user };
+    await nodemailerService.sendMail(user.email, subject, template, context);
 
     res.status(200).json({ message: "Password has been reset successfully" });
   } catch (error) {
@@ -119,9 +103,18 @@ exports.changePassword = async (req, res) => {
     user.password_hash = hashedPassword;
     await user.save();
 
+    //notify user that password is changed successfully
+    const subject = "Password Changed Successfully";
+    const template = "change-password-success";
+    const context = { user };
+    await nodemailerService.sendMail(user.email, subject, template, context);
+
     res.status(200).json({ message: "Password has been changed successfully" });
   } catch (error) {
-    if (error.name === "TokenExpiredError" || error.name === "JsonWebTokenError"){
+    if (
+      error.name === "TokenExpiredError" ||
+      error.name === "JsonWebTokenError"
+    ) {
       res.status(400).json({ error: "Invalid token" });
     } else {
       res.status(500).json({ error: "Error processing the request" });

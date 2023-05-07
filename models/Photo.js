@@ -34,10 +34,10 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
+      // title: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      // },
       description: {
         type: DataTypes.TEXT,
         allowNull: true,

@@ -9,6 +9,7 @@ const passwordRoutes = require("./passwordRoutes");
 const placeRoutes = require("./placeRoutes");
 const reviewRoutes = require("./reviewRoutes");
 const photoRoutes = require("./photoRoutes");
+const searchRoutes = require("./searchRoutes");
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
@@ -21,5 +22,6 @@ app.use("/friendships", friendshipRoutes);
 // app.use("/comments", commentRoutes);
 // app.use("/likes", likeRoutes);
 app.use("/password", passwordRoutes);
+app.use("/search", searchRoutes);
 
 module.exports = app;

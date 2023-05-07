@@ -8,10 +8,10 @@ module.exports = (sequelize) => {
   const Place = require("./Place")(sequelize);
   // const TripPlace = require("./TripPlace")(sequelize);
   const Photo = require("./Photo")(sequelize);
-  // const Group = require("./Group")(sequelize);
-  // const GroupMember = require("./GroupMember")(sequelize);
+  const Group = require("./Group")(sequelize);
+  const GroupMember = require("./GroupMember")(sequelize);
   const Review = require("./Review")(sequelize);
-  // const Post = require("./Post")(sequelize);
+  const Post = require("./Post")(sequelize);
   // const Comment = require("./Comment")(sequelize);
   // const Like = require("./Like")(sequelize);
   // const TripComment = require("./TripComment")(sequelize);
@@ -27,6 +27,10 @@ module.exports = (sequelize) => {
   // Relations User - Trip
   User.hasMany(Trip, { foreignKey: "user_id" });
   Trip.belongsTo(User, { foreignKey: "user_id" });
+
+  // Relations Trip - Post
+  Trip.hasMany(Post, { foreignKey: "trip_id" });
+  Post.belongsTo(Trip, { foreignKey: "trip_id" });
 
   // Relations Trip - Place - TripPlace
   Trip.belongsToMany(Place, {
@@ -44,8 +48,8 @@ module.exports = (sequelize) => {
   Photo.belongsTo(Trip, { foreignKey: "trip_id" });
 
   // // Relations User - Group - GroupMember
-  // User.belongsToMany(Group, { through: GroupMember });
-  // Group.belongsToMany(User, { through: GroupMember });
+  User.belongsToMany(Group, { through: "group_members" });
+  Group.belongsToMany(User, { through: "group_members" });
 
   // // Relations User - Review - Place
   User.hasMany(Review, { foreignKey: "user_id" });
@@ -54,8 +58,8 @@ module.exports = (sequelize) => {
   Review.belongsTo(Place, { foreignKey: "place_id" });
 
   // // Relations User - Post
-  // User.hasMany(Post, { foreignKey: "user_id" });
-  // Post.belongsTo(User, { foreignKey: "user_id" });
+  User.hasMany(Post, { foreignKey: "user_id" });
+  Post.belongsTo(User, { foreignKey: "user_id" });
 
   // // Relations User - Comment - Post
   // User.hasMany(Comment, { foreignKey: "user_id" });
@@ -75,13 +79,10 @@ module.exports = (sequelize) => {
     Trip,
     Place,
     Photo,
-    // Group,
-    // GroupMember,
+    Group,
     Review,
-    // Post,
+    Post,
     // Comment,
     // Like,
-    // TripComment,
-    // TripLike,
   };
 };

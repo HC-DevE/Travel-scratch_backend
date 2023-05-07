@@ -1,5 +1,7 @@
 const sequelize = require("../config/db");
 const User = require("../models/User")(sequelize);
+const Post = require("../models/Post")(sequelize);
+const { Op } = require("sequelize");
 
 exports.getUserProfile = async (req, res) => {
   try {
@@ -10,6 +12,7 @@ exports.getUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -54,21 +57,44 @@ exports.deleteUserProfile = async (req, res) => {
   }
 };
 
-//just for testing the route without being logged in 
+//just for testing the route without being logged in
 exports.getAllUsers = async (req, res) => {
+  const { User } = require("../models/associations")(sequelize);
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: Post,
+        },
+      ],
+      attributes: { exclude: ["password_hash"] },
+    });
 
     if (!users) {
       return res.status(404).json({ error: "Users not found" });
     }
-    //remove password_hash from the users
-    const usersWithoutPassword = users.map((user) => {
-      const { password_hash, ...rest } = Object.assign({}, user.get());
-      return rest;
-    });
-    res.status(200).json(usersWithoutPassword);
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+// search users by name or email
+exports.searchUser = async (query) => {
+  try {
+    const users = await User.findAll({
+      where: {
+        [Op.or]: [
+          { first_name: { [Op.like]: `%${query}%` } },
+          { last_name: { [Op.like]: `%${query}%` } },
+          { email: { [Op.like]: `%${query}%` } },
+        ],
+      },
+      attributes: ["id", "first_name", "last_name", "email", "profile_picture"],
+    });
+    // res.status(200).json(users);
+    return users;
+  } catch (error) {
+    next(error);
   }
 };

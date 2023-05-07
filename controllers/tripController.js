@@ -3,6 +3,7 @@ const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
 const User = require("../models/User")(sequelize);
 const Photo = require("../models/Photo")(sequelize);
+const { Op } = require("sequelize");
 
 exports.createTrip = async (req, res) => {
   // check if ther is a title
@@ -104,3 +105,52 @@ exports.getUserTrip = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+//search for trips
+exports.searchTrips = async (query) => {
+  const { Trip } = require("../models/associations")(sequelize);
+  try {
+    const trips = await Trip.findAll({
+      where: {
+        title: { [Op.like]: `%${query}%` },
+      },
+      include: [
+        {
+          model: Place,
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Photo,
+        },
+      ],
+    });
+    // res.status(200).json({ success: true, data: trips });
+    return trips;
+  } catch (err) {
+    // res.status(500).json({ error: err.message });
+    return err;
+  }
+};
+
+//alternative search trip methode
+
+// exports.searchTrips = async (req, res, next) => {
+//   try {
+//     const { query } = req.query;
+//     const trips = await Trip.findAll({
+//       where: {
+//         [Op.or]: [
+//           { name: { [Op.like]: `%${query}%` } },
+//           { description: { [Op.like]: `%${query}%` } },
+//           { category: { [Op.like]: `%${query}%` } },
+//         ],
+//       },
+//       attributes: ["id", "name", "description", "category", "created_at"],
+//     });
+//     res.json({ success: true, data: trips });
+//   } catch (error) {
+//     next(error);
+//   }
+// };

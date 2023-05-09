@@ -16,7 +16,14 @@ async function sendMail(mailTo, mailSubject, mailTemplate, mailContext) {
 
   // Load HTML template file
   const html = await ejs.renderFile(
-    path.join(__dirname, "templates", `${mailTemplate}.ejs`),
+    path.join(
+      __dirname,
+      "..",
+      "utils",
+      "emails",
+      "templates",
+      `${mailTemplate}.ejs`
+    ),
     mailContext
   );
 

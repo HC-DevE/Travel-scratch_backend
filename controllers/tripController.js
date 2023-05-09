@@ -2,7 +2,7 @@ const sequelize = require("../config/db");
 const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
 const User = require("../models/User")(sequelize);
-const Photo = require("../models/Photo")(sequelize);
+const Media = require("../models/Media")(sequelize);
 const { Op } = require("sequelize");
 
 exports.createTrip = async (req, res) => {
@@ -56,7 +56,7 @@ exports.getUserTrips = async (req, res) => {
         },
       },
       {
-        model: Photo,
+        model: Media,
       },
     ],
   });
@@ -67,8 +67,6 @@ exports.getUserTrips = async (req, res) => {
   res.status(200).json(trips);
 };
 
-// Add other trip-related actions
-
 //testing all the trips for all users
 exports.getAllTrips = async (req, res) => {
   const { Trip } = require("../models/associations")(sequelize);
@@ -78,7 +76,7 @@ exports.getAllTrips = async (req, res) => {
         {
           model: Place,
           through: {
-            attributes: [], // to avoid the other columns in the assocations
+            attributes: [],
           },
         },
         // {
@@ -86,7 +84,7 @@ exports.getAllTrips = async (req, res) => {
         //   attributes: ["id", "username", "email"],
         // },
         {
-          model: Photo,
+          model: Media,
         },
       ],
     });
@@ -122,7 +120,7 @@ exports.searchTrips = async (query) => {
           },
         },
         {
-          model: Photo,
+          model: Media,
         },
       ],
     });

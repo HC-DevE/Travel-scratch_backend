@@ -18,11 +18,14 @@ const sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
+    define: {
+      underscored: true, // use snake_case column names in tables
+    },
+    logging: false, // disable logging of SQL queries
   }
 );
 
 //Passez l'instance sequelize à la fonction initAssociations
-
 initAssociations(sequelize);
 
 sequelize

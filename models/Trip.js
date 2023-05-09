@@ -18,14 +18,6 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      place_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Place",
-          key: "id",
-        },
-      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,

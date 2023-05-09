@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class Photo extends Model {}
+  class Media extends Model {}
 
-  Photo.init(
+  Media.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -34,10 +34,6 @@ module.exports = (sequelize) => {
           key: "id",
         },
       },
-      // title: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      // },
       description: {
         type: DataTypes.TEXT,
         allowNull: true,
@@ -56,17 +52,20 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
+      type: {
+        type: DataTypes.ENUM("photo", "video"),
+        allowNull: false,
+      },
     },
     {
       sequelize,
-      modelName: "Photo",
-      tableName: "photos",
+      modelName: "Media",
+      tableName: "medias",
       timestamps: false,
     }
   );
-  return Photo;
+  return Media;
 };
-
 
 //update coming soon to get ride of the sequelize parameter everywhere
 
@@ -136,5 +135,3 @@ module.exports = (sequelize) => {
 // );
 
 // module.exports = Photo;
-
-

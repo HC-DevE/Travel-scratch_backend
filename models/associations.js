@@ -6,20 +6,12 @@ module.exports = (sequelize) => {
   const Friendship = require("./Friendship")(sequelize);
   const Trip = require("./Trip")(sequelize);
   const Place = require("./Place")(sequelize);
-  // const TripPlace = require("./TripPlace")(sequelize);
-  const Photo = require("./Photo")(sequelize);
+  const Media = require("./Media")(sequelize);
   const Group = require("./Group")(sequelize);
-  const GroupMember = require("./GroupMember")(sequelize);
   const Review = require("./Review")(sequelize);
   const Post = require("./Post")(sequelize);
   // const Comment = require("./Comment")(sequelize);
   // const Like = require("./Like")(sequelize);
-  // const TripComment = require("./TripComment")(sequelize);
-  // const TripLike = require("./TripLike")(sequelize);
-  // const TripPlaceComment = require("./TripPlaceComment")(sequelize);
-  // const TripPlaceLike = require("./TripPlaceLike")(sequelize);
-  // const TripPlacePhoto = require("./TripPlacePhoto")(sequelize);
-  // const TripPlaceReview = require("./TripPlaceReview")(sequelize);
 
   // Relations User - Friendship
   User.belongsToMany(User, { as: "Friends", through: Friendship });
@@ -43,9 +35,9 @@ module.exports = (sequelize) => {
     foreignKey: "place_id",
   });
 
-  // // Relations Trip - Photo
-  Trip.hasMany(Photo, { foreignKey: "trip_id" });
-  Photo.belongsTo(Trip, { foreignKey: "trip_id" });
+  // // Relations Trip - Media
+  Trip.hasMany(Media, { foreignKey: "trip_id" });
+  Media.belongsTo(Trip, { foreignKey: "trip_id" });
 
   // // Relations User - Group - GroupMember
   User.belongsToMany(Group, { through: "group_members" });
@@ -60,6 +52,14 @@ module.exports = (sequelize) => {
   // // Relations User - Post
   User.hasMany(Post, { foreignKey: "user_id" });
   Post.belongsTo(User, { foreignKey: "user_id" });
+
+  // // Relations User - Media
+  User.hasMany(Media, { foreignKey: "user_id" });
+  Media.belongsTo(User, { foreignKey: "user_id" });
+
+  // // Relations Post - Media
+  Post.hasMany(Media, { foreignKey: "post_id" });
+  Media.belongsTo(Post, { foreignKey: "post_id" });
 
   // // Relations User - Comment - Post
   // User.hasMany(Comment, { foreignKey: "user_id" });
@@ -78,7 +78,7 @@ module.exports = (sequelize) => {
     Friendship,
     Trip,
     Place,
-    Photo,
+    Media,
     Group,
     Review,
     Post,

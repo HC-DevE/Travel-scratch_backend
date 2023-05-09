@@ -1,5 +1,6 @@
-const photoService = require("../services/photoService");
+const mediaService = require("../services/mediaService");
 const clearCache = require("../utils/clearCache");
+const upload = require("../config/multer");
 
 exports.createPhoto = async (req, res) => {
   try {
@@ -10,26 +11,33 @@ exports.createPhoto = async (req, res) => {
 
     // if (!canUpload) {
     //   return res.status(401).json({
-    //     error: "You don't have access to upload photos for this place/trip",
+    //     error: "You don't have access to upload medias for this place/trip",
     //   });
     // }
 
-    // Save the uploaded photo to external storage
+    // Save the uploaded media to external storage
     const file = req.file;
-    const { url } = await photoService.uploadPhoto(file);
+    const compressedFile = await upload.compressFile(file);
 
-    // Save the photo record to the database
-    const photoId = await photoService.savePhotoToDatabase(
-      placeId,
-      tripId,
+    // Save the compressed file to external storage
+    const { url } = await mediaService.uploadMedia(
+      compressedFile,
+      file.mimetype
+    );
+
+    // Save the media record to the database
+    const mediaId = await mediaService.saveMediaToDatabase(
       userId,
-      url
+      tripId,
+      placeId,
+      url,
+      file.mimetype.startsWith("image/") ? "photo" : "video"
     );
 
     // Clear the cache for the current user and place/trip
     clearCache(userId, placeId, tripId);
 
-    res.status(201).json({ id: photoId });
+    res.status(201).json({ id: mediaId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -38,8 +46,8 @@ exports.createPhoto = async (req, res) => {
 
 exports.getPhoto = async (req, res) => {
   try {
-    const photoId = req.params.id;
-    const url = await photoService.getPhotoUrl(photoId);
+    const mediaId = req.params.id;
+    const url = await mediaService.getMediaUrl(mediaId);
     res.status(200).json({ url });
   } catch (error) {
     console.error(error);

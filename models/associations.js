@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
 
   // Relations User - Friendship
   User.belongsToMany(User, { as: "Friends", through: Friendship });
+  // User.belongsToMany(User, {through: Friendship,as: "Friends",foreignKey: "user_id"});
 
   // Relations User - Trip
   User.hasMany(Trip, { foreignKey: "user_id" });

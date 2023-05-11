@@ -1,4 +1,6 @@
+const { Op } = require("sequelize");
 const sequelize = require("../config/db");
+
 const Friendship = require("../models/Friendship")(sequelize);
 const Post = require("../models/Post")(sequelize);
 
@@ -26,29 +28,31 @@ exports.savePostToDatabase = async (
 };
 
 exports.getPostsByFriends = async (userId, postType) => {
-  console.log("post type", postType);
-  const { Post, User } = require("../models/associations")(sequelize);
+  const { Post, User, Friendship } = require("../models/associations")(
+    sequelize
+  );
   try {
-    const friends = await User.findAll({
+    const friends = await Friendship.findAll({
       where: {
-        id: userId,
-      },
-      include: {
-        model: User,
-        as: "Friends",
-        through: {
-          where: {
-            status: "accepted",
-          },
-        },
+        [Op.or]: [{ user_id: userId }, { friend_id: userId }],
+        status: "accepted",
       },
     });
-    const friendIds = friends.map((friend) => console.log(friend));
-    // const friendIds = friends.map((friend) => friend.friend_id);
+
+    //todo: filterfirends doesnt work
+    const friendIds = friends.map((friend) => {
+      return friend.friend_id === userId ? friend.friend_id : friend.user_id;
+    });
+    const filteredFriendIds = friendIds.filter(
+      (friendId) => friendId !== undefined && friendId !== userId
+    );
+    console.log(filteredFriendIds);
 
     const posts = await Post.findAll({
       where: {
-        user_id: friendIds,
+        user_id: {
+          [Op.in]: friendIds,
+        },
         type: postType ?? ["other", "trip"],
       },
       include: [

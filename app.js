@@ -7,12 +7,12 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
-const indexRouter = require("./routes/indexRouter");
-const pageNotFoundRoute = require("./routes/pageNotFoundRoute");
-const errorHandler = require("./middleware/errorHandler");
+const indexRouter = require("./src/routes/indexRouter");
+const pageNotFoundRoute = require("./src/routes/pageNotFoundRoute");
+const errorHandler = require("./src/middleware/errorHandler");
 
-require("./config/db");
-require("./config/passport")(passport);
+require("./src/config/db");
+require("./src/config/passport")(passport);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -21,7 +21,7 @@ app.use(cors());
 app.use(passport.initialize());
 
 // Import and configure passport
-require("./config/passport")(passport);
+require("./src/config/passport")(passport);
 
 app.use("/api", indexRouter);
 app.use(pageNotFoundRoute);

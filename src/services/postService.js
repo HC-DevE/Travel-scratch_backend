@@ -41,12 +41,8 @@ exports.getPostsByFriends = async (userId, postType) => {
 
     //todo: filterfirends doesnt work
     const friendIds = friends.map((friend) => {
-      return friend.friend_id === userId ? friend.friend_id : friend.user_id;
+      return friend.friend_id != userId ? friend.friend_id : friend.user_id;
     });
-    const filteredFriendIds = friendIds.filter(
-      (friendId) => friendId !== undefined && friendId !== userId
-    );
-    console.log(filteredFriendIds);
 
     const posts = await Post.findAll({
       where: {

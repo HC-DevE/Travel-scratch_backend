@@ -11,6 +11,7 @@ const reviewRoutes = require("./reviewRoutes");
 const searchRoutes = require("./searchRoutes");
 const tripRoutes = require("./tripRoutes");
 const userRoutes = require("./userRoutes");
+const groupRoutes = require("./groupRoutes");
 
 app.use("/auth", authRoutes);
 app.use("/friendships", friendshipRoutes);
@@ -22,6 +23,8 @@ app.use("/reviews", reviewRoutes);
 app.use("/search", searchRoutes);
 app.use("/trips", tripRoutes);
 app.use("/users", userRoutes);
+app.use("/users", userRoutes);
+app.use("/groups", groupRoutes);
 // app.use("/comments", commentRoutes);
 // app.use("/likes", likeRoutes);
 

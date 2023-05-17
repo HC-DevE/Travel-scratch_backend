@@ -1,6 +1,5 @@
 // Group model
 const { DataTypes, Model } = require("sequelize");
-// const sequelize = require("../config/db");
 
 module.exports = (sequelize) => {
   class Group extends Model {}
@@ -16,7 +15,7 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "users",
+          model: "User",
           key: "id",
         },
       },

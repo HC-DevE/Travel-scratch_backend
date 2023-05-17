@@ -11,6 +11,14 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
+      group_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       role: {
         type: DataTypes.ENUM("member", "admin"),
         allowNull: false,

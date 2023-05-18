@@ -28,11 +28,7 @@ describe("Place Creation", () => {
       .send({
         name: "Test Place 1",
         description: "A place for testing",
-        location: {
-          type: "Point",
-          coordinates: [1.2345, 1.2345],
-          crs: "EPSG:4326"
-        }
+        longitude:"1.2345",latitude:"1.2345",
       });
 
     expect(response.status).to.equal(201);

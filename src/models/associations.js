@@ -41,8 +41,14 @@ module.exports = (sequelize) => {
   Media.belongsTo(Trip, { foreignKey: "trip_id" });
 
   // // Relations User - Group - GroupMember
-  User.belongsToMany(Group, { through: "group_members", foreignKey:"user_id" });
-  Group.belongsToMany(User, { through: "group_members", foreignKey:"group_id" });
+  User.belongsToMany(Group, {
+    through: "group_members",
+    foreignKey: "user_id",
+  });
+  Group.belongsToMany(User, {
+    through: "group_members",
+    foreignKey: "group_id",
+  });
 
   // // Relations User - Review - Place
   User.hasMany(Review, { foreignKey: "user_id" });

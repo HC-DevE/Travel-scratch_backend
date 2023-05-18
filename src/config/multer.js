@@ -46,7 +46,6 @@
 
 const multer = require("multer");
 const sharp = require("sharp");
-const VideoCompressor = require("video-compressor");
 
 const storage = multer.memoryStorage();
 const maxSize = 50 * 1024 * 1024; // Maximum file size in bytes (5 MB)
@@ -56,6 +55,9 @@ const fileFilter = (req, file, cb) => {
     "image/jpeg",
     "image/png",
     "image/gif",
+    "image/webp",
+    "image/avif",
+    "video/webm",
     "video/mp4",
     "video/mpeg",
     "video/quicktime",

@@ -12,40 +12,12 @@ const s3 = new AWS.S3({
   endpoint: new AWS.Endpoint(process.env.DO_SPACES_ENDPOINT),
 });
 
-// async function uploadPhoto(file) {
-//   try {
-//     const compressedImage = await sharp(file.buffer)
-//       .resize({ width: 800 })
-//       .jpeg({ quality: 80 })
-//       .toBuffer();
-
-//     const key = `uploads/${Date.now()}_${file.originalname}`;
-
-//     const params = {
-//       Bucket: process.env.DO_SPACES_BUCKET,
-//       Key: key,
-//       Body: compressedImage,
-//       ACL: "public-read",
-//       ContentType: file.mimetype,
-//     };
-
-//     await s3.upload(params).promise();
-
-//     const url = `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_ENDPOINT}/${key}`;
-
-//     return { url };
-//   } catch (error) {
-//     console.error(error);
-//     throw new Error("Failed to upload photo");
-//   }
-// }
-
-async function uploadMedia(fileBuffer, mimeType) {
+exports.uploadMedia = async (fileBuffer, mimeType) => {
   const fileExtension = mimeType.split("/")[1];
   const folderName = mimeType.startsWith("image/") ? "images" : "videos";
 
   const timestamp = Date.now(); //change this to a better date
-  const fileHash = crypto.createHash('md5').update(fileBuffer).digest('hex');
+  const fileHash = crypto.createHash("md5").update(fileBuffer).digest("hex");
   // console.log(fileHash);
   const fileName = `uploads/${folderName}/${fileHash}_${timestamp}.${fileExtension}`;
   const params = {
@@ -54,7 +26,7 @@ async function uploadMedia(fileBuffer, mimeType) {
     Body: fileBuffer,
     ACL: "public-read",
     ContentType: mimeType,
-    CacheControl: "max-age=3600", // Set cache-control to enable caching for 1 hour
+    CacheControl: "max-age=3600", // enable caching for 1 hour = 3600s
   };
   try {
     await s3.upload(params).promise();
@@ -64,15 +36,15 @@ async function uploadMedia(fileBuffer, mimeType) {
     console.error("Failed to upload media:", error);
     throw error;
   }
-}
+};
 
-async function saveMediaToDatabase(
+exports.saveMediaToDatabase = async (
   userId,
   tripId,
   placeId,
   mediaUrl,
   mediaType
-) {
+) => {
   try {
     const media = await Media.create({
       user_id: userId,
@@ -86,9 +58,9 @@ async function saveMediaToDatabase(
     console.error(error);
     throw new Error("Failed to save media to database");
   }
-}
+};
 
-async function getMediaUrl(photoId) {
+exports.getMediaUrl = async (photoId) => {
   try {
     const photo = await Media.findOne({
       attributes: ["url"],
@@ -104,6 +76,22 @@ async function getMediaUrl(photoId) {
     console.error(error);
     throw new Error("Failed to retrieve photo URL");
   }
-}
+};
 
-module.exports = { uploadMedia, saveMediaToDatabase, getMediaUrl };
+exports.getMediaRecords = async (userId, placeId, tripId) => {
+  try {
+    //fetch media records based on the provided parameters
+    const photos = await Media.findAll({
+      where: {
+        user_id: userId,
+        place_id: placeId,
+        trip_id: tripId,
+      },
+    });
+
+    return photos;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to retrieve media records");
+  }
+};

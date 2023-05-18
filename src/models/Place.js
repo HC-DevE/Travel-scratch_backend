@@ -28,10 +28,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         unique: "latitude_longitude",
       },
-      location: {
-        type: DataTypes.GEOMETRY("POINT"),
-        allowNull: false,
-      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

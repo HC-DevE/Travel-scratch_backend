@@ -12,6 +12,12 @@ const sequelize = new Sequelize(
     host: process.env.LOCAL_DB_HOST,
     dialect: "mysql",
     dialectModule: mysql,
+    // dialectOptions: {
+      // ssl: {
+      //   require: false,
+      //   rejectUnauthorized: true, // Set this to `false` if using a self-signed certificate
+      // },
+    // },
     pool: {
       max: 10,
       min: 0,

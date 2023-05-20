@@ -241,7 +241,6 @@ exports.updateFriendshipStatus = async (req, res) => {
     }
 
     await friendship.update({ status });
-
     res.status(200).json(friendship);
   } catch (err) {
     res

@@ -4,11 +4,13 @@ const postController = require("../controllers/postController");
 const authHandler = require("../middleware/authHandler");
 
 router.post("/", authHandler, postController.createPost);
-// router.get("/", postController.getPosts);
-router.get("/:tripId", authHandler, postController.getPosts);
-router.get("/friends/:userId", postController.getFriendsPosts);
-// router.get("/:id", postController.getPostById);
-// router.get("/users/:userId/posts", postController.getUserPosts);
-// router.get("/trips/:tripId/posts", postController.getTripPosts);
+
+router.get("/all", authHandler, postController.getUserPosts);
+router.get("/:id", authHandler, postController.getPostById);
+router.get("/trips/:tripId", authHandler, postController.getTripPostsById); //TODO: à revoir l'utilité
+router.get("/friends/:friendId", postController.getFriendsPostsById);
+
+router.put("/:id", authHandler, postController.updatePost);
+router.delete("/:id", authHandler, postController.deletePost);
 
 module.exports = router;

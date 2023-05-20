@@ -5,19 +5,25 @@ module.exports = (sequelize) => {
   class GroupMember extends Model {}
   GroupMember.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
       group_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: "Group",
+          key: "id",
+        },
+        primaryKey: true,
+        foreignKey: true,
       },
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "User",
+          key: "id",
+        },
+        primaryKey: true,
+        foreignKey: true,
       },
       role: {
         type: DataTypes.ENUM("member", "admin"),
@@ -36,6 +42,7 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
+      primaryKey: false,
       modelName: "GroupMember",
       tableName: "group_members",
       timestamps: false,

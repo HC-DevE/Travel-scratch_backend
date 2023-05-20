@@ -1,7 +1,11 @@
 const { DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize) => {
-  class User extends Model {}
+  class User extends Model {
+    getFullname() {
+      return [this.first_name, this.last_name].join(" ");
+    }
+  }
 
   User.init(
     {
@@ -22,6 +26,9 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          isEmail: { msg: "Must be a valid email address" },
+        }
       },
       password_hash: {
         type: DataTypes.STRING,

@@ -6,6 +6,7 @@ const friendshipController = require("../controllers/friendshipController");
 const authHandler = require("../middleware/authHandler");
 
 router.post("/", authHandler ,friendshipController.createFriendship);
+
 router.get("/", authHandler ,friendshipController.findAcceptedFriendships);
 router.get("/:id", authHandler ,friendshipController.findFriendshipById);
 

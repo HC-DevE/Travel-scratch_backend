@@ -54,6 +54,7 @@ exports.checkUserAccessPost = async function (userId, postId) {
 };
 
 exports.checkUserAccessGroup = async function (userId, groupId, tripId) {
+  const Group = require("../models/associations")(sequelize);
   try {
     //check if the user belongs to a group
     const group = await Group.findOne({
@@ -63,6 +64,11 @@ exports.checkUserAccessGroup = async function (userId, groupId, tripId) {
         trip_id: tripId,
       },
     });
+    if (!group) {
+      const groupMembers = await group.getUsers();
+      const user = groupMembers.find((user) => user.id === userId);
+      return !!user;
+    }
     return !!group;
   } catch (error) {
     console.error(error);

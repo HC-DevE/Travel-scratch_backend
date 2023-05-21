@@ -72,9 +72,9 @@ module.exports = (sequelize) => {
 // const { DataTypes, Model } = require("sequelize");
 // const sequelize = require("../config/db");
 
-// class Photo extends Model {}
+// class Media extends Model {}
 
-// Photo.init(
+// Media.init(
 //   {
 //     id: {
 //       type: DataTypes.INTEGER,
@@ -130,8 +130,9 @@ module.exports = (sequelize) => {
 //   },
 //   {
 //     sequelize,
-//     modelName: "photo",
+//     modelName: "media",
+//     tableName: "medias",
 //   }
 // );
 
-// module.exports = Photo;
+// module.exports = Media;

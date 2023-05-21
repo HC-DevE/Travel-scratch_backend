@@ -3,6 +3,7 @@ const Media = require("../models/Media")(sequelize);
 const crypto = require("crypto");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv");
+const { Op } = require("sequelize");
 dotenv.config();
 
 const s3 = new AWS.S3({
@@ -29,6 +30,17 @@ exports.uploadMedia = async (fileBuffer, mimeType) => {
     CacheControl: "max-age=3600", // enable caching for 1 hour = 3600s
   };
   try {
+    //check if a media has the same filehash in the url already exists
+    const mediaExists = await Media.findOne({
+      where: {
+        url: { [Op.like]: `%${fileHash}%` },
+      },
+    });
+    if (mediaExists) {
+      throw new Error("Media already exists");
+      //TODO: throw error 409
+    }
+    //upload the file
     await s3.upload(params).promise();
     const url = `https://${process.env.DO_SPACES_BUCKET}.${process.env.DO_SPACES_ENDPOINT}/${fileName}`;
     return { url };
@@ -60,28 +72,28 @@ exports.saveMediaToDatabase = async (
   }
 };
 
-exports.getMediaUrl = async (photoId) => {
+exports.getMediaUrl = async (mediaId) => {
   try {
-    const photo = await Media.findOne({
+    const media = await Media.findOne({
       attributes: ["url"],
       where: {
-        id: photoId,
+        id: mediaId,
       },
     });
-    if (!photo) {
+    if (!media) {
       throw new Error("Media not found");
     }
-    return photo.url;
+    return media.url;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to retrieve photo URL");
+    throw new Error("Failed to retrieve media URL");
   }
 };
 
 exports.getMediaRecords = async (userId, placeId, tripId) => {
   try {
     //fetch media records based on the provided parameters
-    const photos = await Media.findAll({
+    const medias = await Media.findAll({
       where: {
         user_id: userId,
         place_id: placeId,
@@ -89,7 +101,7 @@ exports.getMediaRecords = async (userId, placeId, tripId) => {
       },
     });
 
-    return photos;
+    return medias;
   } catch (error) {
     console.error(error);
     throw new Error("Failed to retrieve media records");

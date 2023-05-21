@@ -51,6 +51,7 @@ const storage = multer.memoryStorage();
 const maxSize = 50 * 1024 * 1024; // Maximum file size in bytes (5 MB)
 
 const fileFilter = (req, file, cb) => {
+  //TODO: update later
   const allowedMimes = [
     "image/jpeg",
     "image/png",
@@ -61,6 +62,12 @@ const fileFilter = (req, file, cb) => {
     "video/mp4",
     "video/mpeg",
     "video/quicktime",
+    "video/mkv",
+    "video/avi",
+    "video/ogg",
+    "video/x-msvideo",
+    "video/x-ms-wmv",
+    "video/x-matroska",
   ];
   if (!allowedMimes.includes(file.mimetype)) {
     return cb(new Error("Invalid file type"));
@@ -85,8 +92,8 @@ async function compressVideo(buffer) {
 const compressFile = (file) => {
   if (file.mimetype.startsWith("image/")) {
     return compressImage(file.buffer);
-  // } else if (file.mimetype.startsWith("video/")) {
-  //   return compressVideo(file.buffer);
+    // } else if (file.mimetype.startsWith("video/")) {
+    //   return compressVideo(file.buffer);
   } else {
     return Promise.resolve(file.buffer);
   }

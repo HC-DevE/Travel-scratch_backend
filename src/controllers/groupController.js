@@ -137,7 +137,7 @@ exports.updateGroupMembers = async (req, res) => {
   }
 };
 
-//to check again the !!isMember
+//to check again the
 exports.removeGroupMembers = async (req, res) => {
   const { Group, User } = require("../models/associations")(sequelize);
   try {
@@ -171,11 +171,28 @@ exports.removeGroupMembers = async (req, res) => {
       });
     }
 
+    //check if the member and user are the creator of the group
+    if (group.created_by === member.id) {
+      return res.status(403).json({
+        message: "You can not remove the creator of the group",
+      });
+    }
+
+    //or
+    
+    //check if there is an admin remaining in the group
+    // const groupMembers = await group.getUsers();
+    // const admins = groupMembers.filter((member) => member.role === "admin");
+    // if (admins.length === 1 && admins[0].id === member.id) {
+    //   return res.status(403).json({
+    //     message: "You can not remove the last admin of the group",
+    //   });
+    // }
+
     //remove the member from the group
-    await group.removeUser(memberId);
+    await group.removeUser(member.id);
 
     // Check if the group has any remaining members //TODO: to keep in feature ?
-    const groupMembers = await group.getUsers();
     if (groupMembers.length === 0) {
       // Delete the group if there are no remaining members
       await group.destroy();

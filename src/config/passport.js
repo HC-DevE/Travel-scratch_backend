@@ -26,7 +26,7 @@ module.exports = (passport) => {
     }
   }));
 
-  // Google OAuth2 strategy for Google authentication
+  // Google OAuth2 strategy for Google authentication //TODO: evolution feature to implement after the 1st release
   passport.use(new GoogleStrategy({
     clientID: 'your_google_client_id',
     clientSecret: 'your_google_client_secret',

@@ -10,11 +10,19 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
-      user_id: {
+      user_id: { //to delete later replaced by group_id
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "User",
+          key: "id",
+        },
+      },
+      group_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "Group",
           key: "id",
         },
       },

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const sequelize = require("../config/db");
+const sequelize = require("../config/db") ;
 const { searchTrips } = require("./tripController");
 const { searchUser } = require("./userController");
 const Trip = require("../models/Trip")(sequelize);

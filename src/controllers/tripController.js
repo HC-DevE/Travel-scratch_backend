@@ -2,7 +2,7 @@
 const sequelize = require("../config/db");
 const Trip = require("../models/Trip")(sequelize);
 const Place = require("../models/Place")(sequelize);
-const User = require("../models/User")(sequelize);
+const Group = require("../models/Group")(sequelize); // trip no longer has a user it has a group instead
 const Media = require("../models/Media")(sequelize);
 const { Op } = require("sequelize");
 
@@ -12,7 +12,7 @@ exports.createTrip = async (req, res) => {
     return res.status(400).json({ error: "Title is required" });
   }
   // Get the user from the request
-  const user = req.user;
+  const userId = req.user.id;
 
   // Check if the trip already exists
   const tripExists = await Trip.findOne({
@@ -32,10 +32,9 @@ exports.createTrip = async (req, res) => {
     description,
     start_date,
     end_date,
-    user_id: user.id,
+    user_id: userId, //change to group_id
   });
-  // Add the trip to the user's trips
-  // user.addTrip(trip);
+
   res.status(201).json({ message: "Trip created successfully", trip: trip });
 };
 
@@ -44,7 +43,7 @@ exports.getUserTrips = async (req, res) => {
   const { Trip } = require("../models/associations")(sequelize);
 
   // Get the user from the request
-  const user = req.user;
+  const userId = req.user.id;
 
   // Define pagination parameters
   const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
@@ -56,7 +55,7 @@ exports.getUserTrips = async (req, res) => {
   try {
     // Get the user's trips with pagination
     const { count, rows: trips } = await Trip.findAndCountAll({
-      where: { user_id: user.id },
+      where: { user_id: userId },
       include: [
         {
           model: Place,
@@ -115,7 +114,22 @@ exports.getUserTrip = async (req, res) => {
   try {
     const tripId = req.params.tripId;
     const userId = req.user.id;
-    const trip = await Trip.findByPk(tripId);
+    const trip = await Trip.findByPk(tripId, {
+      include: [
+        {
+          model: Place,
+          through: {
+            attributes: [],
+          },
+        },
+        {
+          model: Media,
+          through: {
+            attributes: [],
+          },
+        },
+      ],
+    });
     //check if the trip belongs to the user
     if (trip.user_id !== userId) {
       return res.status(401).json({ error: "Unauthorized" });

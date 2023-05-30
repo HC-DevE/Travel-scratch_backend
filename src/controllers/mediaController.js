@@ -21,7 +21,7 @@ exports.uploadMedia = async (req, res) => {
     if (!file || !file.mimetype) {
       return res.status(400).json({ error: "File is required" });
     }
-    
+
     const compressedFile = await upload.compressFile(file);
 
     // Save the compressed file to external storage
@@ -46,9 +46,9 @@ exports.uploadMedia = async (req, res) => {
   } catch (error) {
     console.error(error);
     // if (error.code === "409") {
-      // res.status(409).json({ error: "Media already exists" });
+    // res.status(409).json({ error: "Media already exists" });
     // } else {
-      res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
     // }
   }
 };
@@ -75,7 +75,11 @@ exports.getMedias = async (req, res) => {
 
     if (!canUpload) {
       //check if the user is part of the trip group
-      const isPartOfGroup = await userService.checkUserAccessGroup(userId, tripId);
+      const isPartOfGroup = await userService.checkUserAccessGroup(
+        userId,
+        groupId,
+        tripId
+      );
       return res.status(401).json({
         error: "You don't have access to get medias for this trip",
       });

@@ -54,18 +54,21 @@ exports.checkUserAccessPost = async function (userId, postId) {
 };
 
 exports.checkUserAccessGroup = async function (userId, groupId, tripId) {
-  const Group = require("../models/associations")(sequelize);
+  const { Group } = require("../models/associations")(sequelize);
   try {
     //check if the user belongs to a group
     const group = await Group.findOne({
       where: {
         id: groupId,
-        created_by: userId,
-        trip_id: tripId,
+        // created_by: userId,
+        // trip_id: tripId,
       },
     });
     if (!group) {
-      const groupMembers = await group.getUsers();
+      // Get the group members
+      const groupMembers = await group.getUsers({
+        attributes: ["id", "first_name", "last_name", "email"],
+      });
       const user = groupMembers.find((user) => user.id === userId);
       return !!user;
     }

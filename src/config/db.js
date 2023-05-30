@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
     // dialectOptions: {
       // ssl: {
       //   require: false,
-      //   rejectUnauthorized: true, // Set this to `false` if using a self-signed certificate
+      //   rejectUnauthorized: true, //TODO: Set to `false` if using a self-signed certificate 
       // },
     // },
     pool: {

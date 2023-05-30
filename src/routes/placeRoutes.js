@@ -7,14 +7,14 @@ const limiterHandler = require("../middleware/limiterHandler");
 router.post("/", authHandler, limiterHandler, placeController.createPlace);
 
 router.get("/", authHandler, placeController.getUserPlaces);
-router.get("/:id", authHandler, placeController.getUserPlaceById);
+router.get("/:placeId", authHandler, placeController.getUserPlaceById);
 
 //general get places routes
-router.get("/:id", placeController.getPlaceById);
+router.get("/:placeId", placeController.getPlaceById);
 router.get("/all", placeController.getAllPlaces);
 
-router.put("/:id", authHandler, placeController.updatePlace);
+router.put("/:placeId", authHandler, placeController.updatePlace);
 
-router.delete("/:id", authHandler, placeController.deletePlace);
+router.delete("/:placeId", authHandler, placeController.deletePlace);
 
 module.exports = router;

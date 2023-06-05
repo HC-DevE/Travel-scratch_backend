@@ -32,27 +32,28 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      tableName: "trip_places",
       modelName: "TripPlace",
+      tableName: "trip_places",
       timestamps: false,
-      //   indexes: [
-      //     {
-      //       name: "PRIMARY",
-      //       unique: true,
-      //       using: "BTREE",
-      //       fields: [{ name: "trip_id" }, { name: "place_id" }],
-      //     },
-      //     {
-      //       name: "fk_trip_places_trip_id",
-      //       using: "BTREE",
-      //       fields: [{ name: "trip_id" }],
-      //     },
-      //     {
-      //       name: "fk_trip_places_place_id",
-      //       using: "BTREE",
-      //       fields: [{ name: "place_id" }],
-      //     },
-      //   ],
+      underscored: true,
+      indexes: [
+        {
+          name: "PRIMARY",
+          unique: true,
+          using: "BTREE",
+          fields: [{ name: "trip_id" }, { name: "place_id" }],
+        },
+        {
+          name: "fk_trip_places_trip_id",
+          using: "BTREE",
+          fields: [{ name: "trip_id" }],
+        },
+        {
+          name: "fk_trip_places_place_id",
+          using: "BTREE",
+          fields: [{ name: "place_id" }],
+        },
+      ],
       id: false,
     }
   );

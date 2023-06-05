@@ -2,20 +2,16 @@
 //THIS FILE HAS BEEN CHECKED; NOTES: try to optimize all the imports at one place...
 const sequelize = require("../config/db");
 const Group = require("../models/Group")(sequelize);
-// const GroupMember = require("../models/GroupMember")(sequelize);
-// const Trip = require("../models/Trip")(sequelize);
-// const User = require("../models/User")(sequelize);
 
 exports.createGroup = async (req, res) => {
   const { Group, Trip, User } = require("../models/associations")(sequelize);
   try {
-    // const user = User.findByPk(req.user.id);
-    // const user = req.user;
+    const userId = req.user.id; //comes from the authHandler
     const { name, description, tripId } = req.body;
 
     // Verify if userId belongs to the same trip user_id
     const trip = await Trip.findOne({ where: { id: tripId } });
-    const user = await User.findOne({ where: { id: req.user.id } });
+    const user = await User.findOne({ where: { id: userId } });
     if (!trip) {
       return res.status(404).json({ message: "Trip not found" });
     }
@@ -179,7 +175,7 @@ exports.removeGroupMembers = async (req, res) => {
     }
 
     //or
-    
+
     //check if there is an admin remaining in the group
     // const groupMembers = await group.getUsers();
     // const admins = groupMembers.filter((member) => member.role === "admin");

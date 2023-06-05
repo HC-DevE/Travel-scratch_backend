@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const friendshipController = require("../controllers/friendshipController");
-const authHandler = require("../middleware/authHandler");
+const authHandler = require("../middlewares/authHandler");
 
 router.post("/", authHandler ,friendshipController.createFriendship);
 

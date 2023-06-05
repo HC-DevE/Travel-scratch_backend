@@ -1,7 +1,7 @@
 //search routes.ts
 const express = require("express");
 const router = express.Router();
-const authHandler = require("../middleware/authHandler");
+const authHandler = require("../middlewares/authHandler");
 const searchController = require("../controllers/searchController");
 
 router.get("/", authHandler, searchController.searchAll);

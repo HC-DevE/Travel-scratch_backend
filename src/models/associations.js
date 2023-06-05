@@ -44,15 +44,21 @@ module.exports = (sequelize) => {
 
   // Relations User - Group - GroupMember
   //users
+  User.hasMany(Group, { foreignKey: "created_by" });
   User.belongsToMany(Group, {
     through: GroupMember,
     foreignKey: "user_id",
   });
-  //groups
+  // Group to User association
+  Group.belongsTo(User, { foreignKey: "created_by" });
   Group.belongsToMany(User, {
     through: GroupMember,
     foreignKey: "group_id",
   });
+
+  // Relations Group - Trip
+  Group.hasOne(Trip, { foreignKey: "group_id" });
+  Trip.belongsTo(Group, { foreignKey: "trip_id" });
 
   // Relations User - Review - Place
   User.hasMany(Review, { foreignKey: "user_id" });

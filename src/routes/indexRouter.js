@@ -23,7 +23,6 @@ app.use("/reviews", reviewRoutes);
 app.use("/search", searchRoutes);
 app.use("/trips", tripRoutes);
 app.use("/users", userRoutes);
-app.use("/users", userRoutes);
 app.use("/groups", groupRoutes);
 // app.use("/comments", commentRoutes);
 // app.use("/likes", likeRoutes);

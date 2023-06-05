@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const tripController = require("../controllers/tripController");
-const authHandler = require("../middleware/authHandler");
+const authHandler = require("../middlewares/authHandler");
 
 router.post("/", authHandler, tripController.createTrip);
 router.get("/all", tripController.getAllTrips); //TODO: see the priveleges and utility

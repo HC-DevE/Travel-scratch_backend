@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 const reviewController = require("../controllers/reviewController");
-const authHandler = require("../middleware/authHandler");
+const authHandler = require("../middlewares/authHandler");
 
 router.post("/", authHandler, reviewController.createReview);
 

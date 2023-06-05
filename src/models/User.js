@@ -1,4 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
+const sequelize = require("sequelize");
+const Group = require("./Group");
 
 module.exports = (sequelize) => {
   class User extends Model {
@@ -66,10 +68,12 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      tableName: "users",
       modelName: "User",
+      tableName: "users",
       timestamps: false,
+      underscored: true,
     }
+
   );
   return User;
 };

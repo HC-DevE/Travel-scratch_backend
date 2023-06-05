@@ -46,6 +46,7 @@ module.exports = (sequelize) => {
       modelName: "GroupMember",
       tableName: "group_members",
       timestamps: false,
+      underscored: true,
     }
   );
   return GroupMember;

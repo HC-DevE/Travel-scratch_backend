@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const authHandler = require("../middleware/authHandler");
+const authHandler = require("../middlewares/authHandler");
 const placeController = require("../controllers/placeController");
-const limiterHandler = require("../middleware/limiterHandler");
+const limiterHandler = require("../middlewares/limiterhandler");
 
 router.post("/", authHandler, limiterHandler, placeController.createPlace);
 
+//user get places routes
 router.get("/", authHandler, placeController.getUserPlaces);
 router.get("/:placeId", authHandler, placeController.getUserPlaceById);
 

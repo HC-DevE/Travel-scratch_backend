@@ -43,13 +43,15 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "sequelize": "^6.31.0",
+    "sequelize": "^6.31.1",
     "sharp": "^0.32.1"
   },
   "devDependencies": {
     "chai": "^4.3.7",
     "jest": "^29.5.0",
     "mocha": "^10.2.0",
+    "sequelize-auto-migrations-v2": "^1.2.1",
+    "sequelize-cli": "^6.6.0",
     "supertest": "^6.3.3"
   }
 }

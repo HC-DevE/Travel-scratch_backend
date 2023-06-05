@@ -28,6 +28,10 @@ module.exports = (sequelize) => {
         allowNull: false,
         unique: "latitude_longitude",
       },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -41,9 +45,10 @@ module.exports = (sequelize) => {
     },
     {
       sequelize,
-      tableName: "places",
       modelName: "Place",
+      tableName: "places",
       timestamps: false,
+      underscored: true,
       indexes: [
         {
           unique: true,

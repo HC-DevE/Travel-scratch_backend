@@ -10,14 +10,6 @@ module.exports = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
-      user_id: { //to delete later replaced by group_id
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "User",
-          key: "id",
-        },
-      },
       group_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -58,6 +50,7 @@ module.exports = (sequelize) => {
       modelName: "Trip",
       tableName: "trips",
       timestamps: false,
+      underscored: true,
     }
   );
   return Trip;

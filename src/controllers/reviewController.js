@@ -1,7 +1,7 @@
 //review controller
 
 const sequelize = require("../config/db");
-const errorHandler = require("../middleware/errorHandler");
+const errorHandler = require("../middlewares/errorHandler");
 
 const Review = require("../models/Review")(sequelize);
 const Place = require("../models/Place")(sequelize);

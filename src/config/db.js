@@ -7,15 +7,15 @@ const initAssociations = require("../models/associations");
 const sequelize = new Sequelize(
   process.env.LOCAL_DB_NAME,
   process.env.LOCAL_DB_USERNAME,
-  process.env.LOCAL_DB_PSSWD,
+  process.env.LOCAL_DB_PASSWD,
   {
     host: process.env.LOCAL_DB_HOST,
     dialect: "mysql",
     dialectModule: mysql,
     // dialectOptions: {
       // ssl: {
-      //   require: false,
-      //   rejectUnauthorized: true, //TODO: Set to `false` if using a self-signed certificate 
+      //   require: true,
+      //   rejectUnauthorized: true, //TODO: Set to `false` for self-signed certificate 
       // },
     // },
     pool: {
@@ -38,5 +38,6 @@ sequelize
   .sync()
   .then(() => console.log("Tables created successfully"))
   .catch((err) => console.log("Error syncing tables:", err));
+
 
 module.exports = sequelize;

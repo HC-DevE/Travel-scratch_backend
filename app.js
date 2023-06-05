@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4000;
 
 const indexRouter = require("./src/routes/indexRouter");
 const pageNotFoundRoute = require("./src/routes/pageNotFoundRoute");
-const errorHandler = require("./src/middleware/errorHandler");
+const errorHandler = require("./src/middlewares/errorHandler");
 
 require("./src/config/db");
 require("./src/config/passport")(passport);

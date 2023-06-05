@@ -57,6 +57,7 @@ module.exports = (sequelize) => {
       modelName: "Post",
       tableName: "posts",
       timestamps: false,
+      underscored: true,
     }
   );
   return Post;

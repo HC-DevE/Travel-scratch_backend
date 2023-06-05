@@ -65,7 +65,6 @@ exports.search = async (req, res) => {
 
   try {
     // Perform search across multiple entities using Sequelize queries
-
     const [trips, posts, users, places, medias] = await Promise.all([
       Trip.findAll({
         where: {

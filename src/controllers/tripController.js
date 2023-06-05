@@ -7,35 +7,74 @@ const Media = require("../models/Media")(sequelize);
 const { Op } = require("sequelize");
 
 exports.createTrip = async (req, res) => {
-  // check if ther is a title
+  // Check if there is a title
   if (!req.body.title) {
     return res.status(400).json({ error: "Title is required" });
   }
-  // Get the user from the request
-  const userId = req.user.id;
 
   // Check if the trip already exists
   const tripExists = await Trip.findOne({
     where: {
       title: req.body.title,
-      user_id: user.id,
+      group_id: req.body.group_id ?? null,
     },
   });
+
   if (tripExists) {
     return res.status(400).json({ error: "Trip already exists" });
   }
+
   // Get the trip data from the request
   const { title, description, start_date, end_date } = req.body;
-  // Create a new trip
-  const trip = await Trip.create({
-    title,
-    description,
-    start_date,
-    end_date,
-    user_id: userId, //change to group_id
-  });
+  const userId = req.user.id;
 
-  res.status(201).json({ message: "Trip created successfully", trip: trip });
+  try {
+    await sequelize.transaction(async (t) => {
+      let group;
+      if (req.body?.group_id) {
+        // Get the group_id from the request
+        const groupId = req.body.group_id;
+
+        // Check if the group already exists
+        group = await Group.findOne(
+          { where: { id: groupId } },
+          { transaction: t }
+        );
+
+        if (!group) {
+          return res.status(400).json({ error: "Group does not exist" });
+        }
+      } else {
+        // Create a new group
+        group = await Group.create(
+          {
+            name: req.body.title,
+            description: req.body.description,
+            created_by: userId,
+          },
+          { transaction: t }
+        );
+      }
+
+      const trip = await Trip.create(
+        {
+          title,
+          description,
+          start_date,
+          end_date,
+          group_id: group?.id,
+        },
+        { transaction: t }
+      );
+
+      await group.update({ trip_id: trip.id }, { transaction: t });
+    });
+  } catch (err) {
+    return res.status(500).json({ error: "Error in transaction" });
+  }
+
+  // Send the successful response
+  res.status(201).json({ message: "Trip created successfully" });
 };
 
 // Get all trips for a user
@@ -199,22 +238,25 @@ exports.getFriendTrips = async (req, res) => {
 exports.updateTrip = async (req, res) => {
   try {
     const tripId = req.params.tripId;
-    const userId = req.user.id;
+    const groupId = req.params.groupId;
     const trip = await Trip.findByPk(tripId);
+
     //check if the trip belongs to the user
-    if (trip.user_id !== userId) {
+    if (trip.group_id !== groupId) {
+      //TODO: see privileges
       return res.status(401).json({ error: "Unauthorized" });
     }
     if (!trip) {
       return res.status(404).json({ error: "Trip not found" });
     }
     //update the trip
-    const updatedTrip = await trip.update(req.body);
+    const updatedTrip = await trip.update({ group_id: groupId });
     res.status(200).json(updatedTrip);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 //delete trip
 exports.deleteTrip = async (req, res) => {
   try {

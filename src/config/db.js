@@ -12,12 +12,6 @@ const sequelize = new Sequelize(
     host: process.env.LOCAL_DB_HOST,
     dialect: "mysql",
     dialectModule: mysql,
-    // dialectOptions: {
-      // ssl: {
-      //   require: true,
-      //   rejectUnauthorized: true, //TODO: Set to `false` for self-signed certificate 
-      // },
-    // },
     pool: {
       max: 10,
       min: 0,
@@ -27,7 +21,7 @@ const sequelize = new Sequelize(
     define: {
       underscored: true, // use snake_case column names in tables
     },
-    logging: false, // disable logging of SQL queries
+    logging: true, // disable logging of SQL queries
   }
 );
 

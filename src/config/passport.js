@@ -28,8 +28,8 @@ module.exports = (passport) => {
 
   // Google OAuth2 strategy for Google authentication //TODO: evolution feature to implement after the 1st release
   passport.use(new GoogleStrategy({
-    clientID: 'your_google_client_id',
-    clientSecret: 'your_google_client_secret',
+    clientID: 'google_client_id',
+    clientSecret: 'google_client_secret',
     callbackURL: '/api/auth/google/callback'
   }, async (accessToken, refreshToken, profile, done) => {
     try {
@@ -42,7 +42,7 @@ module.exports = (passport) => {
           first_name: profile.name.givenName,
           last_name: profile.name.familyName,
           email,
-          password: 'your_generated_password', // Generate a password for the user
+          password: 'generated_password', // Generate a password for the user
           birth_date: '1900-01-01', // Set a default birth date
           gender: 'Not specified'
         });

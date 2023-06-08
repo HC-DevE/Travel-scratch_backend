@@ -69,12 +69,11 @@ exports.createTrip = async (req, res) => {
 
       await group.update({ trip_id: trip.id }, { transaction: t });
     });
+    // Send the successful response
+    res.status(201).json({ message: "Trip created successfully" });
   } catch (err) {
     return res.status(500).json({ error: "Error in transaction" });
   }
-
-  // Send the successful response
-  res.status(201).json({ message: "Trip created successfully" });
 };
 
 // Get all trips for a user

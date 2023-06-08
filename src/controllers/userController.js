@@ -18,6 +18,29 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
+//get friend profile
+exports.getFriendProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id, {
+      attributes: { exclude: ["password_hash"] },
+    });
+    const friend = user.getFriendships({ //TODO: update later
+      where: {
+        [Op.or]: [
+          { user_id: req.user.id, friend_id: req.params.id },
+          { user_id: req.params.id, friend_id: req.user.id },
+        ],
+      },
+    });
+    if (!friend) {
+      return res.status(404).json({ message: "Friend not found" });
+    }
+    res.status(200).json(friend);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
 exports.updateUserProfile = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);

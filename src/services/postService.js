@@ -23,7 +23,7 @@ exports.savePostToDatabase = async (
     return post;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to save post to database"); //à revoir
+    throw new Error("Failed to save post to database"); //à revoir si pas mettre return
   }
 };
 

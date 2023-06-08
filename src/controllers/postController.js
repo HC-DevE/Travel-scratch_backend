@@ -22,6 +22,7 @@ exports.createPost = async (req, res, next) => {
         .status(400)
         .json({ error: "A trip ID is required for trip posts" });
     }
+    
     // Save the post record to the database
     const post = await postService.savePostToDatabase(
       userId,
@@ -99,9 +100,14 @@ exports.getFriendsPostsById = async (req, res) => {
 //update
 exports.updatePost = async (req, res, next) => {
   try {
+    const userId = req.user.id;
+
     const { id } = req.params;
     const { content, title, type } = req.body;
     const post = await Post.findByPk(id);
+    if (post.user_id !== userId) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
@@ -115,8 +121,12 @@ exports.updatePost = async (req, res, next) => {
 //delete
 exports.deletePost = async (req, res, next) => {
   try {
+    const userId = req.user.id;
     const { id } = req.params;
     const post = await Post.findByPk(id);
+    if (post.user_id !== userId) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
